@@ -1,0 +1,93 @@
+if (confirm("If you want to paste the number of video, please, click ok. If you don't, click cancel.")) {
+	var number = true;
+} else {
+	var number = false;
+}
+
+var arrlinks=[];
+var arrimage=[];
+var arrtitles=[];
+var elements = document.getElementsByClassName('pl-video-title-link yt-uix-tile-link yt-uix-sessionlink');
+
+	for ( i=0; i < elements.length; i++ ){
+
+		if(number){
+			var indexVideo = i+1;
+			var titlevideo = elements[i].innerHTML;
+			titlevideo = indexVideo + titlevideo;
+		}else{
+			var titlevideo = elements[i].innerHTML;
+		}
+		arrtitles.push(titlevideo);
+	}
+
+	for ( i=0; i < document.links.length; i++ ){
+
+		var linkvideo = document.links[i].href;
+
+		if(linkvideo.indexOf('https://www.youtube.com/watch?v=') + 1) {
+
+			var v = linkvideo.indexOf("v=");
+			var and = linkvideo.indexOf("&");
+			var a = v+2;
+			var b = linkvideo.substring(a, and);
+			var donelink = '<iframe width="560" height="315" src="//www.youtube.com/embed/'+b+'" frameborder="0" allowfullscreen></iframe>';
+			var imagevideo = '<img src="http://img.youtube.com/vi/'+b+'/default.jpg" height="100" width="150"/>';
+			
+			arrlinks.push(donelink);
+			arrimage.push(imagevideo);
+		}
+	}
+
+
+	function unique(arr) {
+
+		var obj = {};
+
+		for(var i=0; i<arr.length; i++) {
+
+			var str = arr[i];
+			obj[str] = true; 
+		}
+		return Object.keys(obj);
+	}
+
+var linksintable = unique(arrlinks);
+var imagesintable = unique(arrimage);
+var allarrayinone = [arrtitles, linksintable, imagesintable];
+var table = document.createElement("TABLE");
+
+	for (i = 0; i < allarrayinone.length; i++) {
+
+		var arrayone = allarrayinone[i];
+
+		if(i==0){
+
+			for (t = 0; t < arrayone.length; t++) {
+				var row = table.insertRow(-1);
+				var cell1 = row.insertCell(0);
+				cell1.innerHTML = arrayone[t];
+			}
+
+		}else if(i==1){
+
+			for (v = 0; v < arrayone.length; v++) {
+				var row2 = table.getElementsByTagName('tr')[v];
+				var cell2 = row2.insertCell(1);
+				var cell3 = row2.insertCell(2);
+				cell2.innerHTML = '<xmp>'+arrayone[v]+'</xmp>';
+				cell3.innerHTML = 'videosection';
+			}
+
+		}else if(i==2){
+
+			for (p = 0; p < arrayone.length; p++) {
+				var row3 = table.getElementsByTagName('tr')[p];
+				var cell3 = row3.insertCell(3);
+				cell3.innerHTML = '<xmp>'+arrayone[p]+'</xmp>';
+			}
+		}
+
+	}
+
+document.write('<table border="4">'+table.innerHTML+'</table>');
